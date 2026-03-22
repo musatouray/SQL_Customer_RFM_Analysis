@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: rfm_scores
+    description: >
+      Calculates Recency, Frequency, and Monetary (RFM) raw values and
+      1–5 scores for every customer using NTILE window functions.
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier."
+        tests:
+          - unique
+          - not_null
+      - name: recency_days
+        description: "Days since the customer's last order (lower = more recent)."
+        tests:
+          - not_null
+      - name: frequency
+        description: "Total number of distinct orders placed by the customer."
+        tests:
+          - not_null
+      - name: monetary
+        description: "Total amount spent by the customer."
+        tests:
+          - not_null
+      - name: recency_score
+        description: "Recency score from 1 (least recent) to 5 (most recent)."
+      - name: frequency_score
+        description: "Frequency score from 1 (lowest) to 5 (highest)."
+      - name: monetary_score
+        description: "Monetary score from 1 (lowest spend) to 5 (highest spend)."
+      - name: rfm_total_score
+        description: "Sum of recency, frequency and monetary scores (3–15)."
+
+  - name: customer_segments
+    description: >
+      Joins RFM scores with customer master data and assigns each customer
+      to a named segment (e.g. Champion, Loyal Customer, At Risk, Lost).
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier."
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Full name of the customer."
+      - name: email
+        description: "Customer email address."
+      - name: customer_segment
+        description: "Human-readable RFM segment label."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Champion'
+                  - 'Loyal Customer'
+                  - 'Potential Loyalist'
+                  - 'New Customer'
+                  - 'Promising'
+                  - 'Need Attention'
+                  - 'About To Sleep'
+                  - 'At Risk'
+                  - 'Cannot Lose Them'
+                  - 'Hibernating'
+                  - 'Lost'
+                  - 'Other'

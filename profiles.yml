@@ -1,0 +1,33 @@
+# profiles.yml – copy this file to ~/.dbt/profiles.yml and fill in your values.
+# Reference: https://learn.microsoft.com/en-us/fabric/data-warehouse/tutorial-setup-dbt
+
+rfm_analysis:
+  target: dev
+  outputs:
+
+    # ── Option 1: Azure CLI authentication (recommended for local development) ──
+    dev:
+      type: fabric
+      driver: 'ODBC Driver 18 for SQL Server'
+      host: "<your-workspace>.datawarehouse.fabric.microsoft.com"
+      database: "<your-fabric-database>"
+      schema: dbo
+      threads: 4
+      authentication: cli
+      encrypt: true
+      trust_cert: false
+
+    # ── Option 2: Service Principal (recommended for CI/CD pipelines) ──
+    prod:
+      type: fabric
+      driver: 'ODBC Driver 18 for SQL Server'
+      host: "<your-workspace>.datawarehouse.fabric.microsoft.com"
+      database: "<your-fabric-database>"
+      schema: dbo
+      threads: 8
+      authentication: serviceprincipal
+      encrypt: true
+      trust_cert: false
+      tenant_id: "{{ env_var('AZURE_TENANT_ID') }}"
+      client_id: "{{ env_var('AZURE_CLIENT_ID') }}"
+      client_secret: "{{ env_var('AZURE_CLIENT_SECRET') }}"
