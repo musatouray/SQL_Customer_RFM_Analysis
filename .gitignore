@@ -1,0 +1,18 @@
+# dbt artifacts
+target/
+dbt_packages/
+logs/
+
+# dbt user-specific config
+.user.yml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Credentials – never commit real profiles
+# profiles.yml is kept as a template; real credentials go in ~/.dbt/profiles.yml

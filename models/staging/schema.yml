@@ -1,0 +1,62 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw tables loaded into the Microsoft Fabric Data Warehouse."
+    schema: dbo
+    tables:
+      - name: orders
+        description: "Transactional order records."
+        columns:
+          - name: order_id
+            description: "Unique identifier for each order."
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key to the customers table."
+            tests:
+              - not_null
+          - name: order_date
+            description: "Date when the order was placed."
+            tests:
+              - not_null
+          - name: order_amount
+            description: "Monetary value of the order."
+            tests:
+              - not_null
+
+      - name: customers
+        description: "Customer master data."
+        columns:
+          - name: customer_id
+            description: "Unique identifier for each customer."
+            tests:
+              - unique
+              - not_null
+
+models:
+  - name: stg_orders
+    description: "Cleaned and cast orders from the raw source."
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: order_date
+        tests:
+          - not_null
+      - name: order_amount
+        tests:
+          - not_null
+
+  - name: stg_customers
+    description: "Cleaned and cast customer records from the raw source."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
